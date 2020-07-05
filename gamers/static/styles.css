@@ -1,0 +1,830 @@
+.elem {
+    cursor: pointer;
+    margin: 20px;
+    font-size: 25px;
+    background-color: #ffffff;
+    color: #464646;
+    border: 2px solid transparent;
+    border-bottom-color: #cad1e9;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    display: block;
+    
+}
+
+.mini-seperator {
+    padding-top: 10px;
+}
+
+.seperator {
+    padding-top: 20px;
+}
+
+.border_top_bottom {
+    border: 1px solid #d6d1d1;
+    border-right-color: transparent;
+    border-left-color: transparent;
+}
+
+.game {
+    margin: 0;
+    display: inline-block;
+    font-size: 14px;
+    color: #464646;
+    margin-left: 2px;
+}
+
+.add-button {
+    float: right;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 14px;
+    color: #464646;
+    background: transparent;
+    margin-top: -1px;
+}
+
+.pp-search {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.first {
+    display: inline-block;
+    margin-left: 2px;
+    width: 30%;
+}
+
+.second {
+    float: right;
+    width: 65%;
+}
+
+.add-button:hover {
+    color: #264f68;
+}
+
+.button {
+    background-color: #264f68;
+    padding: 10px 10px 14px;
+    border-radius: 12px;
+    border-bottom-color: transparent;
+    color: #ffffff;
+}
+
+.buttoneff span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+    -webkit-transition: 0.5s;
+}
+
+.buttoneff span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+    -webkit-transition: 0.5s;
+}
+
+.buttoneff:hover span {
+    padding-right: 25px;
+}
+  
+.buttoneff:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+
+.border {
+    border: 1px solid #d6d1d1;
+}
+
+.button:hover, .add-friend:hover {
+    background-color: #1d3b4d;
+}
+
+.elem:focus, .nav-button, .nav-link, .add-friend , textarea, .update-pp, .add-button:focus, .side-nav-top-right-button {
+    outline: 0 !important;
+}
+
+.elem:focus {
+    border-bottom-color: #1d3b4d;
+}
+
+.button:focus {
+    border-bottom-color: transparent;
+}
+
+h1 {
+    color: #1d3b4d;
+    text-align: center;
+}
+
+h3 {
+    color: #464646;
+}
+
+.message {
+    color: #cad1e9;
+    text-align: center;
+}
+
+.profile {
+    text-align: left;
+    margin: 0;
+    margin-left: 4px;
+}
+
+.bigelem, .multi-bigelem {
+    overflow-x: hidden;
+    display: block;
+    position: fixed;
+    top: 0px;
+
+    width: 50%;
+    margin-top: 5%;
+    position: relative;
+    height: auto;
+}
+
+.multi-bigelem {
+    width: 100%;
+}
+
+.container {
+    background-color: transparent;
+    top: 0;
+    left: 0;
+    transition-property: width, height;
+    transition-duration: 0.5s;
+    -webkit-transition-property: width height;
+    -webkit-transition-duration: 0.5s;
+    overflow-x: hidden;
+    width: 0;
+    height: 0;
+}
+
+.search {
+    overflow: auto;
+    overflow-x: hidden;
+    height: auto;
+    background-color: #f0efef;
+}
+
+.top-border {
+    border-top: 1px solid #d6d1d1;
+}
+
+.middle {
+    margin-right: auto;
+    margin-left: auto;
+    display: block;
+}
+
+.hub {
+    width: 15%;
+    height: 15%;
+}
+
+.pp {
+    width: 200px;
+    height: 200px;
+    margin-top: 25px;
+    border-radius: 50%;
+}
+
+.middle-text {
+    text-align: center;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    
+    100% {
+        transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes spin {
+    0% { 
+        -webkit-transform: rotate(0deg); 
+    }
+    100% { 
+        -webkit-transform: rotate(360deg); 
+    }
+}
+
+.click:active {
+    transform: translateX(6px);
+}
+
+.top-nav {
+    background-color: #ffffff;
+    border-bottom: 1px solid #264f68;
+    overflow: hidden;
+    z-index: 3;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+.top-nav h1 {
+    display: inline;
+    position: absolute;
+    left: 50%;
+    margin: 0;
+    margin-left: -50px;
+    margin-top: 7px;
+}
+
+.top-nav img {
+    width: 50px;
+    height: 50px;
+    display: inline;
+    position: absolute;
+    left: 95%;
+    margin: 0;
+    margin-left: -30px;
+    margin-top: 4px;
+}
+
+.nav-link-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid #cad1e9;
+}
+
+.nav-button {
+    background-color: transparent;
+    padding: 10px 10px 14px;
+    color: #818181;
+    border: 1px solid transparent;
+    font-size: 25px;
+    margin: 0;
+}
+
+.nav-button:hover, .nav-link:hover, .side-nav-top-right-button:hover {
+    color: #1d3b4d;
+}
+
+.side-nav, .double-side-nav {
+    height: 100%;
+    width: 0%;
+    background-color: #ffffff;
+    top: 0;
+    left: 0;
+    transition-property: width height;
+    transition-duration: 0.5s;
+    -webkit-transition-property: width height;
+    -webkit-transition-duration: 0.5s;
+    z-index: 2;
+    position: fixed;
+    overflow-x: hidden;
+    margin: -1px;
+    border-right: 1px solid #264f68;
+}
+
+.double-side-nav-fitter {
+    display: inline-block;
+    width: 20%;
+}
+
+.double-side-nav-div {
+    float: right;
+    width: 72%;
+}
+
+.double-side-nav {
+    transition-duration: 0.8s;
+}
+
+.results {
+    cursor: default;
+    margin: 3px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    color: #818181;
+    font-size: 100%;
+}
+
+.nav-link, .add-friend  {
+    cursor: pointer;
+    display: block;
+    margin: 1px 1px 1px 1px;
+    font-size: 25px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    color: #818181;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.add-friend {
+    border: 1px solid transparent;
+    background-color: #264f68;
+    color: #ffffff;
+    border-radius: 12px;
+}
+
+.padding-top-bottom {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.side-nav-padding {
+    padding-top: 70px;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent; 
+}
+
+::-webkit-scrollbar-thumb {
+    background: #d6d1d1; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #1d3b4d; 
+}
+
+.side-nav-top-right-button {
+    position: absolute;
+    top: 0;
+    right: 0%;
+    cursor: pointer;
+    margin: 1px 1px 1px 1px;
+    font-size: 25px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    color: #818181;
+}
+
+#loader, .loader {
+    border: 16px solid #d6d1d1;
+    border-top-color: #007ac0;
+    border-left-color: #76bbe2;
+    border-right-color: #1d3b4d;
+    border-bottom-color: #d6d1d1;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 4;
+    margin: -25px 0 0 -25px;
+    -webkit-animation-name: spin;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-iteration-count: infinite;
+    animation-name: spin;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+
+.loader {
+    border-width: 8px;
+    width: 25px;
+    height: 25px;
+    display: none;
+}
+
+#loader img, .loader img {
+    width: 100%;
+    height: 100%;
+}
+
+textarea, .bio {
+    margin-left: 4px;
+    width: 80%;
+    height: 80px;
+    resize: none;
+    color: #464646;
+}
+
+.bio {
+    height: auto;
+    border: 1px transparent;
+}
+
+textarea:focus {
+    border-color: #264f68;
+}
+
+.relate {
+    position: relative;
+}
+
+.update-pp {
+    cursor: pointer;
+    background-color: transparent;
+    color: #264f68;
+    position: absolute;
+    font-size: 40px;
+    top: 0;
+    left: 50%;
+    opacity: 0.4;
+    margin-left: -18px;
+    border-radius: 30%;
+}
+
+.border_2 {
+    border: 1px solid #264f68;
+}
+
+.list-item {
+    margin-bottom: 2px;
+    overflow-x: hidden;
+    margin-top: 10px;
+}
+
+.list-item:hover {
+    background-color: #e6e0e0;
+}
+
+.bottom-join {
+    margin-bottom: -1px;
+}
+
+.border_left_right {
+    border: 1px solid #d6d1d1;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #d6d1d1;
+}
+
+.update-pp:hover {
+    opacity: 1;
+}
+
+.file {
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+#error {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 4;
+    margin: -25px 0 0 -25px;
+    display: none;
+}
+
+.remove {
+    width: 100%;
+}
+
+.remove:hover {
+    background-color: #264f68;
+    color: #ffffff;
+}
+
+.double-side-nav-div .add-friend{
+    width: 50px;
+    height: 35px;
+}
+
+#channelroom {
+    height: 0%;
+    width: 50%;
+    background-color: #264f68;
+    bottom: 0;
+    right: 0;
+    transition-property: height;
+    transition-duration: 0.5s;
+    z-index: 3;
+    position: fixed;
+    overflow-x: hidden;
+    border-left: 1px solid #264f68;
+    margin: -1px;
+}
+
+#channelname {
+    color: #ffffff;
+    margin-top: 5px;
+    text-align: center;
+    width: 100%;
+    cursor: default;
+}
+
+h1 {
+    cursor: default;
+}
+
+#chatbox {
+    width: 100%;
+    height: 75%;
+    transition-property: height;
+    transition-duration: 0.5s;
+    background-color: #ffffff;
+    position: absolute;
+    bottom: 40px ;
+    right: 0;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+#channelroom textarea {
+    margin-top: 2px;
+    padding: 0;
+    border: 0.5px solid #264f68;
+    width: auto;
+    height: auto;
+    overflow: hidden;
+}
+
+#channelroom button, #channelroom input {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 38px;
+    width: 25%;
+    background-color: transparent;
+    border: 1px solid transparent;
+}
+
+#channelroom input {
+    left: 0;
+    background-color: #ffffff;
+    height: 34px;
+    width: 75%;
+    font-size: 25px;
+}
+
+#channelroom button {
+    cursor: pointer;
+}
+
+#channelroom button:focus, #channelroom input:focus {
+    outline: 0 !important;
+}
+
+ul {
+    list-style-type: none;
+    font-size: 25px;
+    margin-left: 0;
+    padding-left: 2px;
+    padding-top: 0;
+    margin-top: 0;
+}
+
+.time {
+    font-size: 15px;
+    color: #818181;
+    padding-right: 4px;
+}
+
+@media screen and (min-width: 1000px){
+    .bigelem {
+        top: -20px;
+    }
+}
+
+@media screen and (max-width: 750px){
+
+    #chatbox {
+        bottom: 30px;
+    }
+
+    ul {
+        font-size: 20px;
+    }
+    
+    .time {
+        font-size: 13px;
+    }
+
+    #channelroom button, #channelroom input {
+        height: 28px;
+    }
+    
+    #channelroom input {
+        height: 24px;
+        font-size: 18px;
+    }
+
+    .elem, .nav-button, .nav-link{
+        padding: 8px 8px 12px;
+        font-size: 15px;
+    }
+
+    h1 {
+        font-size: large;
+    }
+
+    h3 {
+        font-size: 15px;
+    }
+
+    .hub {
+        width: 20%;
+        height: 20%;
+    }
+
+    .top-nav img {
+        width: 35px;
+        height: 35px;
+    }
+
+    .pp {
+        width: 150px;
+        height: 150px;
+    }
+
+    .bigelem {
+        width: 80%;
+    }
+
+    textarea {
+        height: 50px;
+    }
+
+    .buttoneff:hover span {
+        padding-right: 15px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 1px;
+    }
+
+    .game, .add-button {
+        font-size: 13px;
+    }
+
+    .pp-search {
+        width: 85px;
+        height: 85px;
+    }
+
+    .add-friend {
+        font-size: 20px;
+    }
+
+    .side-nav-padding {
+        padding-top: 55px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 3px;
+    }
+}
+
+@media screen and (max-width: 600px){
+    .double-side-nav-fitter {
+        width: 50%;
+    }
+    
+    .double-side-nav-div {
+        width: 49%;
+    }
+
+    .double-side-nav-div .pp-search {
+        height: 70px;
+        width: 70px;
+    }
+
+    .double-side-nav-div .add-friend{
+        font-size: 12px;
+        width: 30px;
+        height: 25px;
+    }
+    
+    #channelroom {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 400px){
+    .elem {
+        font-size: 12px;
+        padding: 5px 5px 9px;
+    }
+
+    .double-side-nav-div .message{
+        font-size: 10px;
+    }
+
+    ul {
+        font-size: 15px;
+    }
+    
+    .time {
+        font-size: 10px;
+    }
+
+    .double-side-nav-div .pp-search {
+        height: 37px;
+        width: 37px;
+    }
+
+    .second .mini-seperator {
+        padding-top: 3px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 2px;
+    }
+
+    #loader {
+        border-width: 8px;
+        width: 25px;
+        height: 25px;
+        margin: -12.5px 0 0 -12.5px;
+    }
+
+    h1 {
+        font-size: 17px;
+    }
+
+    h3 {
+        font-size: 13px;
+    }
+
+    .update-pp {
+        font-size: 20px;
+        margin-left: -9px;
+    }
+
+    .hub {
+        width: 25%;
+        height: 25%;
+    }
+
+    .bigelem {
+        width: 100%;
+        border-color: transparent;
+    }
+
+    textarea {
+        height: 30px;
+    }
+
+    .pp {
+        width: 100px;
+        height: 100px;
+        margin-top: 35px;
+    }
+
+    .game, .add-button {
+        font-size: 11px;
+    }
+
+    .side-nav-padding {
+        padding-top: 50px;
+    }
+
+    .add-button {
+        margin-top: 2px;
+    }
+
+    .pp-search {
+        width: 65px;
+        height: 65px;
+    }
+
+    .smallerh3 h3 {
+        font-size: 8px;
+    }
+
+    .add-friend {
+        font-size: 15px;
+    }
+
+    .margin-top {
+        margin-top: 30px;
+    }
+
+    #chatbox {
+        bottom: 25px;
+    }
+
+    #channelroom button, #channelroom input {
+        height: 23px;
+    }
+    
+    #channelroom input {
+        height: 19px;
+        font-size: 14px;
+    }
+}

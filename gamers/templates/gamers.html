@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Gamers Hub
+        </title>
+    </head>
+    <link rel="stylesheet" href="/static/styles.css">
+    <body>
+        <div id="loader"><img class="middle" src="/static/hub.png" alt="Gamers Hub"></div>
+        <div id="error"><h1>ERROR</h1></div>
+
+        <div id="webpage" class="container">
+            <div class="top-nav">
+                <button class="nav-button click" data-button="sidenav">&#9776;</button>
+                <h1>Gamers Hub</h1>
+                <img src="/static/hub.png" alt="Gamers Hub">
+            </div>
+
+            <div class="double-side-nav" id="double-side-nav">
+                <div class="side-nav-padding"></div>
+                <div class="double-side-nav-fitter"></div>
+                
+                <div class="double-side-nav-div relate">
+                    <button class="side-nav-top-right-button click" data-button="double-side-nav-menu">&#9881;</button>
+
+                    <div class="container border-bottom" id="double-side-nav-menu">
+                        <div class="seperator"></div>
+                        <button class="nav-link click" data-button="double-side-nav-friends">Friends</span>
+                        <button class="nav-link click" data-button="friend-requests">Requests</button>
+                    </div>
+                    <div class="seperator"></div>
+                    
+                    <div id="my-fr-parent">
+                        <div id="my-fr"></div>
+                    </div>
+                 
+                </div>
+                
+            </div>  
+    
+            <div class="side-nav" id="side-nav">
+                <div class="side-nav-padding"></div>
+                    <div class="buttoneff">
+                        {% if gamer.pp %}
+                            <img class="nav-link-img middle" id="nav-pp" data-button="profile" id="nav-pp" src="{{ gamer.pp.url }}" alt="Profile Picture">
+                        {% else %}
+                            <img class="nav-link-img middle" id="nav-pp" data-button="profile" id="nav-pp" src="/static/hub.png" alt="Profile Picture">
+                        {% endif %}
+                        <button class="nav-link" data-button="profile"><span data-button="profile">{{ user.first_name }}</span>
+                    </div>
+                    <button class="nav-link buttoneff" data-button="friends"><span data-button="friends">Friends</span></button>
+                    <button class="nav-link buttoneff" data-button="chat"><span data-button="chat">Chat</span></button>
+                <button class="nav-link buttoneff" data-button="search-players"><span data-button="search-players">Find Players</span>
+                <button class="nav-link buttoneff" data-button="logout"><span data-button="logout">Logout</span></button>
+            </div>
+
+            
+
+            <div class="container window" id="profile">
+                <div class="middle bigelem border_left_right border-bottom">
+                    <div class="relate">
+                        {% if gamer.pp %}
+                            <img class="middle pp border" src="{{ gamer.pp.url }}" id="pp" alt="Profile Picture">
+                        {% else %}
+                            <img class="middle pp border" src="/static/hub.png" id="pp" alt="Profile Picture">
+                        {% endif %}
+                        <input type="file" id="image" accept="image/*" class="file" onchange="load_pp(event)" name="image"><br><br>
+                        <label class="update-pp" for="image" data-button="">&#x270e;<label>
+                        
+                    </div>
+
+                    <h3 class="profile">{{ user.first_name }} {{ user.last_name }}</h3>
+                    <h3 class="message profile">{{ user.username }}</h3>
+                    <h3 class="profile">Bio</h3>
+                    <textarea id="bio" placeholder="150 characters maximum" class="border">{{ gamer.bio }}</textarea>
+
+                    <div class="container relate middle top-border" id="manage-games">
+                        <input class="elem bottom-join" id="add_search" placeholder="Search" type="text"/>
+                        <div id="loader2" class="loader"><img class="middle" src="/static/hub.png" alt="Gamers Hub"></div>
+                        <div id="manage-add-parent" class="search">
+                            <div id="manage-add"></div>
+                        </div>
+                    </div>
+                        <button class="elem button click buttoneff" data-button="manage-games"><span data-button="manage-games">Add Games</span></button>
+                        <button class="elem button click" data-button="update-profile">Update</button>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="container window" id="players">
+                <div class="bigelem middle border_left_right border-bottom">
+                    <input class="elem" id="search-players" placeholder="Search by game" type="text"/>
+                    <div id="profiles-result-parent">
+                        <div id="profiles-result">
+                        </div>
+                    </div>
+                </div>              
+            </div>
+
+
+            <div id="channelroom" class="relate">
+                <h3 id="channelname">None</h3>
+
+                <div id="chatbox">
+                        <ul id="chatlist">
+                            
+                        </ul>
+                </div>         
+                
+                <button id="enter" class="click" data-button="message">&#8594;</button>
+                <input type="text" id="message">
+            </div>
+        </div>
+    </body>
+    <script>
+        const loader = document.querySelector("#loader");
+        const loader_add_games = document.querySelector("#loader2");
+        const page = document.querySelector("#webpage");
+        const profile = document.querySelector("#profile");
+        const players = document.querySelector("#players");
+        const manage_games = document.querySelector("#manage-games");
+        const side_nav = document.querySelector("#side-nav");
+        const friends_side_nav = document.querySelector("#double-side-nav");
+        const bio = document.querySelector("#bio");
+        const image = document.querySelector("#image");
+        const error = document.querySelector("#error");
+        const double_sn_menu = document.querySelector("#double-side-nav-menu");
+        let search_players_count = 0;
+        const current_user = "{{ user.id }}";
+        socket_condition = true;
+        let is_chat_on = false;
+
+
+        function add_message(data) {
+            let string = "";
+            let condition = data[1];
+            let date = new Date();
+            time =  ("0" + date.getHours()).slice(-2) + ':' + date.getMinutes();
+            if (condition)
+                string = `<li style="text-align: right;">${data[0]}</li><li class="time" style="text-align: right;">${time}</li>`;
+            else
+                string = `<li">${data[0]}</li><li class="time">${time}</li>`;
+            document.querySelector("#chatlist").innerHTML += string;
+        }
+
+        function chat_on_off() {
+            if (localStorage.getItem("channel")){
+                let height = "";
+                if (window.innerWidth <= 400)
+                    height = "200px";
+                else if (window.innerWidth <= 750)
+                    height = "250px";
+                else
+                    height = "300px";
+                if (document.querySelector("#channelroom").style.height == height){
+                    document.querySelector("#channelroom").style.height = "0%";
+                    is_chat_on = false;
+                }    
+                else{
+                    document.querySelector("#channelroom").style.height = height;
+                    is_chat_on = true;
+                } 
+            }               
+        }
+
+        function refresh_chat() {
+            document.querySelector("#chatlist").remove();
+            document.querySelector("#chatbox").innerHTML += '<ul id="chatlist" data-button="no"></ul>'
+        }
+
+        function side_nav_on_off() {
+            if ((side_nav.style.width == "20%") || (side_nav.style.width == "50%") || (side_nav.style.width == "35%")){
+                friends_side_nav.style.width = "0";
+                side_nav.style.width = "0";
+            }    
+            else
+                if (window.innerWidth <= 600)
+                    side_nav.style.width = "50%";
+                else
+                    side_nav.style.width = "20%";
+        }
+
+        function refresh_chat() {
+            document.querySelector("#chatlist").remove();
+            document.querySelector("#chatbox").innerHTML += '<ul id="chatlist"></ul>'
+        }
+
+        function friends_on_off() {
+            if ((friends_side_nav.style.width == "70%") || (friends_side_nav.style.width == "100%")){
+                friends_side_nav.style.width = "0";
+            }
+            else
+                if (window.innerWidth <= 600)
+                    friends_side_nav.style.width = "100%";
+                else
+                    friends_side_nav.style.width = "70%";
+                
+        }
+
+        function double_sn_menu_on_off() {
+            if (double_sn_menu.style.width == "100%"){
+                close_window(double_sn_menu);
+            }
+            else {
+                double_sn_menu.style.width = "100%";
+                double_sn_menu.style.height = "100%";
+            }
+        }
+        
+        function load_pp(event) {
+            let pp = document.querySelector("#pp");
+            let pp2 = document.querySelector("#nav-pp");
+            pp.src = URL.createObjectURL(event.target.files[0]);
+            pp2.src = pp.src
+        }
+
+        function check_window() {
+            if (window.innerWidth <= 600){
+                side_nav_on_off();
+            }
+        }
+
+        function check_length(chars, element) { 
+            if (element.value.length >= chars){
+                element.value = element.value.slice(0, chars);
+            }
+        }
+
+        function close_window(element) {
+            element.style.height = "0";
+            element.style.width = "0"; 
+        }
+
+        function close_window_all() {
+            document.querySelectorAll(".window").forEach( Element => {
+                Element.style.height = "0";
+                Element.style.width = "0"; 
+            })
+        }
+
+        function open_window(element) {
+            loader.style.display = "block";
+            setTimeout( () => {
+                element.style.height = "100%";
+                element.style.width = "100%"; 
+                loader.style.display = "none";
+            }, 500) 
+        }
+
+        function manage_games_on_off() {
+            if (manage_games.style.width == "100%"){
+                manage_games.style.width = "0";
+                manage_games.style.height = "0";
+            }
+            else {
+                manage_games.style.width = "100%";
+                manage_games.style.height = "100%";
+            }
+        }    
+
+        function update_profile_request() {
+            const request = new XMLHttpRequest();
+            request.open("POST", "/updatep")
+            loader.style.display = "block";
+            request.onload = () => {
+                loader.style.display = "none";
+            }
+            request.ontimeout = () => {
+                loader.style.display = "none";
+                ERROR();
+            }
+            const data = new FormData();
+            data.append("image", image.files[0]);
+            data.append("bio", bio.value);
+            request.send(data);
+        }
+
+        function ERROR() {
+            error.style.display = "block";
+            setTimeout( () => {
+                error.style.display = "none";
+            }, 1000)
+        }
+
+        function add_profile_result(data) {
+            let profile_result = document.querySelector("#profiles-result");
+            let string = '<div class="relate multi-bigelem border-bottom"><div class="first">';
+            string += `<img class="pp-search middle border" src="${data[1]}" alt="Profile Picture"></div>`;
+            string += `<div class="second"><h3 class="profile">${data[3]} ${data[4]}</h3>`;
+            string += `<h3 class="message profile smaller-h3">${data[2]}</h3>`;
+            string += `<h3 class="message profile smaller-h3">Plays ${data[0]} </h3>`;
+            string += `<button class="middle click add-friend" data-profile_button="${data[6]}" value="${data[5]}">${data[6]}</button>`;
+            string += '</div></div>';
+            profile_result.innerHTML += string;
+        }
+
+        function refresh_profile_result(){
+            document.querySelector("#profiles-result").remove();
+            let string = '<div id="profiles-result"></div>'
+            document.querySelector("#profiles-result-parent").innerHTML += string;
+            search_players_count = 0;
+        }
+
+        function add_friend_request(data) {
+            let fr = document.querySelector("#my-fr");
+            let string = '<div class="relate multi-bigelem border-bottom"><div class="first">';
+            string += `<img class="pp-search middle border" src="${data[0]}" alt="Profile Picture"></div>`;
+            string += `<div class="second"><h3 class="profile">${data[2]} ${data[3]}</h3>`;
+            string += `<h3 class="message profile smaller-h3">${data[1]}</h3>`;
+            string += '<div class="mini-seperator"></div>'
+            string += `<div class="first"><button class="click add-friend" data-friend_request_button="Accept" value="${data[4]}">&#10003;</button></div>`;
+            string += `<div class="second"><button class="click add-friend" data-friend_request_button="Cancel" value="${data[4]}">&times;</button></div>`;
+            string += '</div></div>';
+            fr.innerHTML += string;
+        }
+
+        function add_friend(data) {
+            let fr = document.querySelector("#my-fr");
+            let string = '<div class="relate multi-bigelem border-bottom"><div class="first">';
+            string += `<img class="pp-search middle border" src="${data[0]}" alt="Profile Picture"></div>`;
+            string += `<div class="second"><h3 class="profile">${data[2]} ${data[3]}</h3>`;
+            string += `<h3 class="message profile smaller-h3">${data[1]}</h3>`;
+            string += '<div class="mini-seperator"></div>'
+            string += `<div class="first"><button class="click add-friend" data-friends="${data[2]}" value="${data[4]}">&#128172;</button></div>`
+            string += `<div class="second"><button class="click add-friend" data-remove="remove" value="${data[4]}">&times;</button></div>`
+            string += `</div><div class="container margin-top" id="${data[4]}"><button class="nav-link remove click" data-friend_request_button="Remove" value="${data[4]}">Remove</button></div></div>`;
+            fr.innerHTML += string;
+        }
+
+        function refresh_friend_requests(){
+            document.querySelector("#my-fr").remove();
+            let string = '<div id="my-fr"></div>'
+            document.querySelector("#my-fr-parent").innerHTML += string;
+        }
+
+        function add_manage_game(data) {
+            let manage_add = document.querySelector("#manage-add");
+            let string = `<div class="list-item"><div><div class="game">${data[1]}</div><button class="add-button click" data-add_button="add-game" value="${ data[0] }">&#8853;</button></div></div>`;
+            manage_add.innerHTML += string;
+        }
+
+        function refresh_add_manage_games() {
+            document.querySelector("#manage-add").remove();
+            let string = '<div id="manage-add"></div>'
+            document.querySelector("#manage-add-parent").innerHTML += string;
+        }
+
+        function add_game_request(element) {
+            const request = new XMLHttpRequest();
+            let string = element.value;
+            loader_add_games.style.display = "block";
+            request.open("GET", `/add/game/${string}`)
+            request.onload = () => {
+                loader_add_games.style.display = "none";
+                element.parentElement.parentElement.remove();
+            }
+            request.ontimeout = () => {
+                loader_add_games.style.display = "none";
+                ERROR();
+            }
+            request.send();
+        }
+
+        function exist(char, string){
+            let length = string.length;
+
+            for (var i = 0; i < length; i++){
+                if (string[i] == char){
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function search_manage_request() {
+            const request = new XMLHttpRequest();
+            let string = document.querySelector("#add_search").value;
+            loader_add_games.style.display = "block";
+            if (string != "" && !exist('/', string) && !exist('\\', string)){
+                request.open("GET", `/search/game/manage/${string}`)
+                request.onload = () => {
+                    refresh_add_manage_games();
+                    loader_add_games.style.display = "none";
+                    const data = JSON.parse(request.responseText);
+                    if (data[0] != "false"){
+                        data.forEach(add_manage_game);
+                    }    
+                }
+                request.ontimeout = () => {
+                    loader_add_games.style.display = "none";
+                    ERROR();
+                }
+                request.send();
+            }
+            else{
+                refresh_add_manage_games();
+                loader_add_games.style.display = "none";
+            }   
+        }
+
+        function friends_manage_request(element, string, condition) {
+            const request = new XMLHttpRequest();
+            request.open("GET", `user/manage/${element.value}/${string}`)
+            loader.style.display = "block";
+            request.onload = () => {
+                loader.style.display = "none";
+                const data = JSON.parse(request.responseText);
+                if (condition){
+                    element.dataset.profile_button = data[0];
+                    element.innerHTML = data[0];
+                    
+                }
+                else {
+                    if (data[0] == "canceled" || data[0] == "Friends")
+                        element.parentElement.parentElement.parentElement.remove();
+                    else if (data[0] == "removed")
+                        element.parentElement.parentElement.remove();
+                        
+                }
+            }
+            request.ontimeout = () => {
+                loader_add_games.style.display = "none";
+                ERROR();
+            }
+            request.send();
+        }
+
+        function my_friend_requests() {
+            const request = new XMLHttpRequest();
+            request.open("GET", 'my_frequests')
+            loader.style.display = "block";
+            request.onload = () => {
+                loader.style.display = "none";
+                refresh_friend_requests();
+                const data = JSON.parse(request.responseText);
+                if (data[0] != "false"){
+                    data.forEach(add_friend_request);
+                }
+            }
+            request.ontimeout = () => {
+                loader_add_games.style.display = "none";
+                ERROR();
+            }
+            request.send();
+        }
+
+        function my_friend_list() {
+            const request = new XMLHttpRequest();
+            request.open("GET", 'my_friendlist')
+            loader.style.display = "block";
+            request.onload = () => {
+                loader.style.display = "none";
+                refresh_friend_requests();
+                const data = JSON.parse(request.responseText);
+                if (data[0] != "false"){
+                    data.forEach(add_friend);
+                }          
+            }
+            request.ontimeout = () => {
+                loader_add_games.style.display = "none";
+                ERROR();
+            }
+            request.send();
+        }
+
+        function search_players_game_request(condition) {
+            const request = new XMLHttpRequest();
+            let string = document.querySelector("#search-players").value;
+            loader.style.display = "block";
+            if (string != "" && !exist('/', string) && !exist('\\', string)){
+                request.open("GET", `search/players/${string}/${search_players_count}/${search_players_count+7}`)
+                request.onload = () => {
+                    if (condition)
+                        refresh_profile_result()
+                    loader.style.display = "none";
+                    const data = JSON.parse(request.responseText);
+                    if (data[0] != "false"){
+                        data.forEach(add_profile_result);
+                    }    
+                }
+                request.ontimeout = () => {
+                    loader.style.display = "none";
+                    ERROR();
+                }
+                request.send();
+            }
+            else{
+                refresh_profile_result()
+                loader.style.display = "none";
+            }   
+        }
+    
+        function socket() {
+            if (localStorage.getItem("channel")){
+                socket_condition = false;
+                const request = new XMLHttpRequest();
+                request.open("GET", `socket/socket/${localStorage.getItem("channel")}`)
+                request.onload = () => {
+                    const data = JSON.parse(request.responseText);
+                    if (data[0] != "false"){
+                        data.forEach(add_message);
+                    } 
+                    socket_condition = true;
+                }
+                request.send();
+            }  
+        }
+
+        function new_message_request() {
+            const request = new XMLHttpRequest();
+            request.open("POST", `message/${localStorage.getItem("chat")}`)
+            const data = new FormData();
+            data.append("message", document.querySelector("#message").value);
+            request.send(data);
+        }
+
+        function get_chat() {
+            const request = new XMLHttpRequest();
+            request.open("GET", `socket/else/${localStorage.getItem("channel")}`)
+            request.onload = () => {
+                refresh_chat();
+    
+                const data = JSON.parse(request.responseText);
+                data.forEach(add_message);
+            }
+            request.send()
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loader.style.display = "none";
+            page.style.height = "100%";
+            page.style.width = "100%";
+            open_window(players);
+
+            bio.addEventListener("keyup", () => {
+                check_length(150, bio);
+            })
+
+            image.addEventListener("change", event => {
+                load_pp(event);
+            })
+
+            document.querySelector("#channelname").addEventListener("click", () => {
+                chat_on_off();
+            })
+
+            document.querySelector("#add_search").addEventListener("keyup", () => {
+                search_manage_request();
+            })
+
+            document.querySelector("#search-players").addEventListener("keyup", () => {
+                search_players_game_request(true);
+            })
+
+            document.querySelector("#nav-pp").addEventListener("click", () => {
+                close_window_all();
+                open_window(profile);
+                check_window();
+            })
+
+            document.querySelector('#message').addEventListener("keyup", e => {
+                if (e.keyCode === 13) {  
+                    document.querySelector('#enter').click();
+                }
+            })
+            
+            setInterval(() => {
+                if (socket_condition)
+                    socket();
+            }, 1000);
+            
+            if (localStorage.getItem("chat_title"))
+                document.querySelector('#channelname').innerHTML = localStorage.getItem("chat_title");
+                get_chat();
+
+            document.addEventListener('click', event => {
+                const element = event.target;
+                const data = element.dataset.add_button;
+                const data2 = element.dataset.profile_button;
+                const data3 = element.dataset.friend_request_button;
+                const data4 = element.dataset.remove;
+                const data5 = element.dataset.friends;
+                if (data){
+                    add_game_request(element);
+                }
+                else if (data4){
+                    let button = document.getElementById(`${element.value}`);
+                    if (button.style.width == "100%"){
+                        close_window(button);
+                    }
+                    else {
+                        button.style.width = "100%";
+                        button.style.height = "100%";
+                    }
+                }
+                else if (data2){
+                    friends_manage_request(element, data2, true);
+                }
+                else if (data3){
+                    friends_manage_request(element, data3, false);
+                }
+                else if (data5){
+                    localStorage.setItem("channel", (current_user + "," + element.value));
+                    localStorage.setItem("chat", element.value);
+                    localStorage.setItem("chat_title", data5);
+                    refresh_chat();
+                    get_chat()
+                    document.querySelector('#channelname').innerHTML = localStorage.getItem("chat_title");
+                    if (!is_chat_on) {
+                        chat_on_off();
+                    }
+                }
+            })
+
+            window.onscroll = () => {
+                if ((window.innerHeight + window.scrollY >= document.body.offsetHeight) && players.style.width == "100%") {
+                    search_players_count += 7;
+                    search_players_game_request(false);
+                }
+            };
+
+            document.querySelectorAll("button").forEach(button => {
+                button.addEventListener("click", event =>{
+                    const element = event.target;
+                    const data = element.dataset.button;
+                    if (data == "sidenav"){
+                        side_nav_on_off();
+                    }
+                    else if (data == "friends"){
+                        my_friend_list();
+                        friends_on_off();
+                    }
+                    else if (data == "double-side-nav-menu"){
+                        double_sn_menu_on_off();
+                    }
+                    else if (data == "friend-requests"){
+                        my_friend_requests();
+                        double_sn_menu_on_off();
+                    }
+                    else if (data == "double-side-nav-friends"){
+                        my_friend_list();
+                        double_sn_menu_on_off();
+                    }
+                    else if (data == "profile"){
+                        close_window_all();
+                        open_window(profile);
+                        check_window();
+
+                    }
+                    else if (data == "chat"){
+                        chat_on_off();
+                    }
+                    else if (data == "logout"){
+                        location.href = "/logout";
+                    }
+                    else if (data == "update-profile"){
+                        check_length(150, bio);
+                        update_profile_request();
+                    }
+                    else if (data == "manage-games") {
+                        manage_games_on_off();
+                    }
+                    else if (data == "add-games"){
+                        search_manage_request();
+                    }
+                    else if (data == "search-players"){
+                        close_window_all();
+                        check_window();
+                        open_window(players);
+                    }
+                    else if (data == "message"){
+                        string = document.querySelector("#message").value;
+                        if (string != ""){
+                            new_message_request();
+                            let DATA = [string, true];
+                            add_message(DATA);
+                            document.querySelector("#message").value = "";
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+</html>

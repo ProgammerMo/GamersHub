@@ -1,0 +1,55 @@
+ <!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Gamers Hub
+        </title>
+    </head>
+    <link rel="stylesheet" href="/static/styles.css">
+    <body>
+        <div id="loader"><img class="middle" src="/static/hub.png" alt="Gamers Hub"></div>
+        
+        <div class="container" id="login">
+            <div class="border middle bigelem">
+                <img class="middle hub" src="/static/hub.png" alt="Gamers Hub">
+                <h1>Gamers Hub</h1>
+                <form action="{% url 'index' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="type" value="login">
+                    <input class="elem" name="username" placeholder="Username" type="text"/>
+                    <input class="elem" name="password" placeholder="Password" type="password"/>
+                    {% if loginmessage %}
+                        <h3 class="message">{{ loginmessage }}</h3>
+                    {% endif %}
+                    <button class="elem button buttoneff" type="submit"><span>Login</span> </button>
+                    <button class="elem button buttoneff" type="button" id="regbutton"><span>Register</span></button>
+                </form>
+            </div>
+        </div>
+
+        <div id="register" class="container">
+            <div class="border middle bigelem">
+                <img class="middle hub" src="/static/hub.png" alt="Gamers Hub">
+                <h1>Gamers Hub</h1>
+                <form action="{% url 'index' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="type" value="register">
+                    <input class="elem" name="firstname" placeholder="First name" type="text"/>
+                    <input class="elem" name="lastname" placeholder="Last name" type="text"/>
+                    <input class="elem" name="username" placeholder="Username" type="text"/>
+                    <input class="elem" name="password" placeholder="Password" type="password"/>
+                    <input class="elem" name="confpassword" placeholder="Confirm Password" type="password"/>
+                    <input class="elem" name="email" placeholder="Email address" type="text"/>
+                    {% if regmessage %}
+                        <h3 class="message">{{ regmessage }}</h3>
+                    {% endif %}
+                    <button class="elem button buttoneff" type="submit"><span>Register</span></button>
+                    <button id="loginbutton" type="button" class="elem button buttoneff"><span>Login</span></button>
+                </form>
+            </div>
+        </div>
+    </body>
+    <script>const page = "{{ page }}";</script>
+    <script src="/static/login.js"></script>
+    
+</html>
